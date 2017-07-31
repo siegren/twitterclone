@@ -1,0 +1,9 @@
+<div class="comment-box">
+    	<h2><%= comment.username %></h2>
+	<p><%= comment.body %></p>
+	  <%= link_to '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'.html_safe, [comment.tweet, comment],
+               method: :delete,
+               data: { confirm: 'Are you sure?' }, class: 'del-comment' %>
+
+	<hr />
+</div>

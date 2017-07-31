@@ -1,0 +1,24 @@
+<div>
+        <% @users.each do |users| %>
+            <%= users.email %> <%=  link_to 'Visit Profile', profile_path(users.id) %> 
+            
+            <% @followed = Follow.where("followed = '#{users.id}' and follower = '#{current_user.id}'").count %>
+            <% 
+            if users.id == current_user.id
+                %><span>You</span><%
+            else
+                if @followed >= 1
+            
+             %>
+             <%= link_to 'Unfollow', unfollow_path(users.id) %>
+             <%
+                 else 
+            %>
+            <%= link_to 'Follow', follow_path(users.id) %>
+            <%
+            end 
+            
+                end %> <br />
+        <% end%>
+    
+</div>

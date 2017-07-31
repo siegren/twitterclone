@@ -1,0 +1,102 @@
+
+<div class="container">
+<div class="row">
+  <div class="col-md-3">
+    <div class="row">
+      <div class="col-md-5">
+        <%= image_tag(@user.avatar.url(:thumb))%>
+      </div>
+      <div class="col-md-7">
+        <span class="name"><%= @user.name %></span><br/>
+        <span class="username">@<%= @user.username %></span><br/>
+        <% @followed = Follow.where("followed = '#{@user.id}' and follower = '#{current_user.id}'").count %>
+            <% 
+            if @user.id == current_user.id
+                %><%
+            else
+                if @followed >= 1
+            
+             %>
+             <%= link_to 'Unfollow', unfollow_path(@user.id) %>
+             <%
+                 else 
+            %>
+            <%= link_to 'Follow', follow_path(@user.id) %>
+            <%
+            end 
+            
+                end %> <br />
+      </div>
+  
+    </div>
+
+    <div class="row tweet-count">
+      <div class="col-md-4">
+        <% @my_tweet_count = Tweet.where("user_id = '#{@user.id}'").count %>
+         <p class="text-center"><%= @my_tweet_count %> <br /> TWEETS</p>
+        </div>
+        <div class="col-md-4">
+          <% @my_followed = Follow.where("follower = '#{@user.id}'").count %> 
+          <p class="text-center"><%= @my_followed %> <br /> FOLLOWED</p>
+        </div>
+            <div class="col-md-4">
+         <% @my_follower = Follow.where("followed = '#{@user.id}'").count %>   
+       
+        
+         <p class="text-center"><%= @my_follower %> <br /> FOLLOWER</p>
+      </div>
+    </div>
+     <br/>
+                     <% if @user.id == current_user.id %>
+    <div class="row">
+      <div class="col-md-12">
+         <%= render 'tweets/form' %>
+      </div>
+    </div>
+    
+    <% end %>
+  </div>
+    <div class="col-md-7">
+       
+      <div class="row">
+        <% @tweets.each do |tweet| %>
+        <div class="col-md-12">
+           <div class="row post">
+             <div class="col-md-2">
+               <%= image_tag(@user.avatar.url(:thumb)) %>
+            </div>
+             
+             <div class="col-md-10 content">
+                 <span class="name"><%= @user.name %></span> <span class="username">@<%= @user.username %></span> <br />
+                            <%= tweet.post %> <br />
+                    <% if tweet.avatar.exists? %>
+                    <%= image_tag(tweet.avatar.url(:medium)) %>
+                    <% end %>
+          
+                  <span class="time-ago">
+                    Posted <%= time_ago_in_words(tweet.created_at) %> ago
+                  </span>
+  
+                <% if tweet.user_id == current_user.id %>
+                  <div class="button">
+                    <%= link_to 'Show', tweet %>
+        <%= link_to '<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>'.html_safe, edit_tweet_path(tweet) %>
+        
+        <%= link_to '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'.html_safe, tweet, method: :delete, data: { confirm: 'Are you sure?' } %>
+                  </div>
+                       <% end %>
+             </div>
+           </div>
+        </div>
+            <% end %>
+      </div>
+     
+  </div>
+    <div class="col-md-2">
+    
+  </div>
+  
+</div>
+
+</div>
+
